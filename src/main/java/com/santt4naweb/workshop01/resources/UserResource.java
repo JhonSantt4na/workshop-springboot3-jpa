@@ -12,7 +12,7 @@ import com.santt4naweb.workshop01.entities.User;
 @RequestMapping(value = "/users")  // Mapeando os endpoints para que tudo que for do "User" use essa rota /user 
 public class UserResource {
 	
-	// Criando um metodo = EbdPoint Para acessar os usuarios
+	// Criando um metodo = EndPoint Para acessar os usuarios
 	
 	@GetMapping 	// Informando que é uma resposta ao GET HTTP
 	public ResponseEntity<User> findAll(){

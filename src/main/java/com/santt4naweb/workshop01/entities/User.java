@@ -3,26 +3,28 @@ package com.santt4naweb.workshop01.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-// Passo a Passo 
-// Forma Convencional de Criar as Entities (Entidades)
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+
+@Entity  //Declara que a classe é uma entidade JPA (Java Persistence API). Isso significa que ela será mapeada para uma tabela no banco de dados.
+@Table(name = "tb_user") // Especifica o nome da tabela no banco de dados que será associada à entidade.
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1l;
 	
-	// Passo 1: Atributos
+	@Id // Define o atributo como a chave primária da tabela.
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //Indica que o valor da chave primária será gerado automaticamente pelo banco de dados. 
 	private Long id;
 	private String name;
 	private String email;
 	private String phone;
 	private String password;
 	
-	// Passo 2: Associações
-	//		(Como é a primeira Classe não temos)
-
-	// Passo 3: Construtores
-	
-	public User() {   //  ( Obrigado )	
+	public User() {   
 	}
 
 	public User(Long id, String name, String email, String phone, String password) {
@@ -33,9 +35,6 @@ public class User implements Serializable {
 		this.phone = phone;
 		this.password = password;
 	}
-	
-	// Passo 4: Getters e Setters
-	//( Lembrando que as Collections teram somente os Getters )
 	
 	public Long getId() {
 		return id;
@@ -77,9 +76,6 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	// Passo 5: hashCode e equals
-	//  Normalmente usamos o id para comparação porem depende da aplicação
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -96,16 +92,5 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	// Passo 6: Serializable
-	// Adiciona na Classe "implements Serializable"
-	
-	// (Interface para que esses objetos sejam transformados em cadeias de bytes
-	// Para que esse obj possa ser trafegado pela rede, ou que possa ser gravado em arquivos etc..)
-	
-	// Logo em seguida importamos o Serializable e o seu numero de serie
-	
-	// import = import java.io.Serializable;
-	// Num. Serie = private static final long serialVersionUID = 1l;
 	
 }
