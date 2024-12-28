@@ -1,30 +1,37 @@
 package com.santt4naweb.workshop01.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
-@Entity  //Declara que a classe é uma entidade JPA (Java Persistence API). Isso significa que ela será mapeada para uma tabela no banco de dados.
+@Entity // Declara que a classe é uma entidade JPA (Java Persistence API). Isso
+			// significa que ela será mapeada para uma tabela no banco de dados.
 @Table(name = "tb_user") // Especifica o nome da tabela no banco de dados que será associada à entidade.
 public class User implements Serializable {
-	
+
 	private static final long serialVersionUID = 1l;
-	
+
 	@Id // Define o atributo como a chave primária da tabela.
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //Indica que o valor da chave primária será gerado automaticamente pelo banco de dados. 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // Indica que o valor da chave primária será gerado														// automaticamente pelo banco de dados.
 	private Long id;
 	private String name;
 	private String email;
 	private String phone;
 	private String password;
 
-	public User() {   
+	// Pode conter muitos orders > Instanciando ja a lista
+	@OneToMany(mappedBy = "client") // 1 para muitos quem estiver mapeado com o client
+	private List<Order> orders = new ArrayList<>();
+
+	public User() {
 	}
 
 	public User(Long id, String name, String email, String phone, String password) {
@@ -35,7 +42,7 @@ public class User implements Serializable {
 		this.phone = phone;
 		this.password = password;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -75,7 +82,12 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	// Somente o Get da Lista Order
+	public List<Order> getOrders() {
+		return orders;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -92,5 +104,9 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 }
