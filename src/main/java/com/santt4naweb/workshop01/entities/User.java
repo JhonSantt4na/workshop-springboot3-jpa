@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +22,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1l;
 
 	@Id // Define o atributo como a chave primária da tabela.
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // Indica que o valor da chave primária será gerado														// automaticamente pelo banco de dados.
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // Indica que o valor da chave primária será gerado //
+																			// automaticamente pelo banco de dados.
 	private Long id;
 	private String name;
 	private String email;
@@ -28,6 +31,16 @@ public class User implements Serializable {
 	private String password;
 
 	// Pode conter muitos orders > Instanciando ja a lista
+	// Lazy Loading = é assionado quando usamos o para muitos para não crashar
+	// Quando temos essa associação o pedido do lado do 1 vem junto no corpo da req
+	// Basta usar a anotação @JsonIgnore para ele vim junto
+
+	// Por isso que adicionamos a config
+	// spring.jpa-open-in-view=true no arquivo aplication.propetries
+	// Ele permite q o Json faça requisição para o banco de dados para trazer os
+	// dados
+
+	@JsonIgnore // Para evitar o loop de chamadas para order que order chama o cliente etc..
 	@OneToMany(mappedBy = "client") // 1 para muitos quem estiver mapeado com o client
 	private List<Order> orders = new ArrayList<>();
 
