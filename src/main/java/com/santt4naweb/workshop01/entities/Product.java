@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,6 +35,10 @@ public class Product implements Serializable {
    // inverseJoinColumns = Chave estrangeira da outra entity
    // Lembrando que precisamos ir na outra classe mapear isso
    private Set<Category> categories = new HashSet<>(); // Hash pois tem que usar uma classe e o Set é uma interterface
+
+   // Declaração de items para a classe product
+   @OneToMany(mappedBy = "id.product")
+   private Set<OrderItem> items = new HashSet<>();
 
    // Constructors
    public Product() {
@@ -92,6 +99,15 @@ public class Product implements Serializable {
       return categories;
    }
    // Colections não tem o Setters
+
+   @JsonIgnore // Pra não ficar em loop
+   public Set<Order> getOrders() {
+      Set<Order> set = new HashSet<>();
+      for (OrderItem x : items) {
+         set.add(x.getOrder());
+      }
+      return set;
+   }
 
    // HashCode e Equals
    @Override

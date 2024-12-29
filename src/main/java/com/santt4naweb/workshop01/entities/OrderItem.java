@@ -51,6 +51,7 @@ public class OrderItem implements Serializable {
       id.setOrder(order); // Entrando no id e adicionando no order de la
    }
 
+ 
    public Product getProduct() {
       return id.getProduct();
    }
