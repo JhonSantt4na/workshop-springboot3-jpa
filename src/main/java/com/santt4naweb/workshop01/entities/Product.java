@@ -8,8 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_product")
@@ -23,8 +25,12 @@ public class Product implements Serializable {
    private Double price;
    private String imgUrl;
 
-   // 1 pra muitos set para não repetir a categoria
-   @Transient // Para não interpetra isso
+   @ManyToMany // Muitos para muitos
+   @JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+   // joinColuns = junta as tabelas
+   // @JoinColuns(name = "Nome da chave")
+   // inverseJoinColumns = Chave estrangeira da outra entity
+   // Lembrando que precisamos ir na outra classe mapear isso
    private Set<Category> categories = new HashSet<>(); // Hash pois tem que usar uma classe e o Set é uma interterface
 
    // Constructors
