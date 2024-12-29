@@ -8,6 +8,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.santt4naweb.workshop01.entities.enums.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,10 +16,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_order") // para não da conflito com o order palavra chave do sql
+@Table(name = "tb_order")
 public class Order implements Serializable {
    private static final long serialVersionUID = 1L;
 
@@ -27,32 +29,27 @@ public class Order implements Serializable {
    private Long id;
 
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-   // JsonFormat = Formatando a String da Hora
    private Instant moment;
 
-   // private OrderStatus orderStatus;
-   // Vamos fazer o seguinte ou inves de usar o tipo OrderStatus
-   // iremos ultilizar o Integer dentro da nossa classe para salvarmos um num int
-   // no banco
-   // mas fora da nossa classe ele continuara sendo OrderStatus :
    private Integer orderStatus;
 
-   @ManyToOne // Anotação para o Muitos para 1
-   @JoinColumn(name = "client_id") // Anotação com o nome da chave estrangeira
+   @ManyToOne
+   @JoinColumn(name = "client_id")
    private User client;
 
-   // Mapeando o id do OrderItem que no caso é a nossa classe aux
-   @OneToMany(mappedBy = "id.order") // 1 Para muitos ou seja cada pedido pode ter varios produtos
+   @OneToMany(mappedBy = "id.order")
    private Set<OrderItem> items = new HashSet<>();
+
+   // No Caso do 1 para 1 temos que mapear o mesmo id para os dois
+   @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+   private Payment payment;
 
    public Order() {
    }
 
-   // Adicionado o OrderStatus ao Contructors
    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
       this.id = id;
       this.moment = moment;
-      // this.orderStatus = orderStatus; >> para o caso padrão
       setOrderStatus(orderStatus);
       this.client = client;
    }
@@ -73,16 +70,12 @@ public class Order implements Serializable {
       this.moment = moment;
    }
 
-   // Getters e Setters adicionados do OrderStatus
-
    public OrderStatus getOrderStatus() {
-      // return orderStatus; >> para o caso padrão
-      return OrderStatus.valueOf(orderStatus); // convertendo o numero inteiro da classe para OrderStatus
+      return OrderStatus.valueOf(orderStatus);
    }
 
    public void setOrderStatus(OrderStatus orderStatus) {
-      // this.orderStatus = orderStatus; >> para o caso padrão
-      if (orderStatus != null) { // Para não aceitar null
+      if (orderStatus != null) {
          this.orderStatus = orderStatus.getCode();
       }
    }
@@ -95,7 +88,15 @@ public class Order implements Serializable {
       this.client = client;
    }
 
-   // Crinado um Getter para o item
+   // Payments Getters e setters
+   public Payment getPayment() {
+      return payment;
+   }
+
+   public void setPayment(Payment payment) {
+      this.payment = payment;
+   }
+
    public Set<OrderItem> getItems() {
       return items;
    }

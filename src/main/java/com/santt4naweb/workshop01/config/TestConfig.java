@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.santt4naweb.workshop01.entities.Category;
 import com.santt4naweb.workshop01.entities.Order;
 import com.santt4naweb.workshop01.entities.OrderItem;
+import com.santt4naweb.workshop01.entities.Payment;
 import com.santt4naweb.workshop01.entities.Product;
 import com.santt4naweb.workshop01.entities.User;
 import com.santt4naweb.workshop01.entities.enums.OrderStatus;
@@ -93,6 +94,13 @@ public class TestConfig implements CommandLineRunner { // CommandLineRunner: Exe
 
 		// Save in DB
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
+		// Adicionando um pagamento no Pedido
+		Payment pay1 = new Payment(null, Instant.parse("2024-06-20T21:53:07Z"), o1);
+		o1.setPayment(pay1);
+
+		// Logo apos isso vamos mandar salva o pedido novamente
+		orderRepository.save(o1);
 	}
 
 }
