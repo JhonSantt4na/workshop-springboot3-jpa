@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.santt4naweb.workshop01.entities.enums.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +27,13 @@ public class Order implements Serializable {
    // JsonFormat = Formatando a String da Hora
    private Instant moment;
 
+   // private OrderStatus orderStatus;
+   // Vamos fazer o seguinte ou inves de usar o tipo OrderStatus
+   // iremos ultilizar o Integer dentro da nossa classe para salvarmos um num int
+   // no banco
+   // mas fora da nossa classe ele continuara sendo OrderStatus :
+   private Integer orderStatus;
+
    @ManyToOne // Anotação para o Muitos para 1
    @JoinColumn(name = "client_id") // Anotação com o nome da chave estrangeira
    private User client;
@@ -34,9 +42,12 @@ public class Order implements Serializable {
    public Order() {
    }
 
-   public Order(Long id, Instant moment, User client) {
+   // Adicionado o OrderStatus ao Contructors
+   public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
       this.id = id;
       this.moment = moment;
+      // this.orderStatus = orderStatus;  >> para o caso padrão
+      setOrderStatus(orderStatus); 
       this.client = client;
    }
 
@@ -55,6 +66,20 @@ public class Order implements Serializable {
 
    public void setMoment(Instant moment) {
       this.moment = moment;
+   }
+
+   // Getters e Setters adicionados do OrderStatus
+
+   public OrderStatus getOrderStatus() {
+      // return orderStatus; >> para o caso padrão
+      return OrderStatus.valueOf(orderStatus); // convertendo o numero inteiro da classe para OrderStatus
+   }
+
+   public void setOrderStatus(OrderStatus orderStatus) {
+      // this.orderStatus = orderStatus; >> para o caso padrão
+      if (orderStatus != null) { // Para não aceitar null
+         this.orderStatus = orderStatus.getCode();
+      }
    }
 
    public User getClient() {
@@ -91,6 +116,3 @@ public class Order implements Serializable {
       return true;
    }
 }
-// Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), u1);
-// Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), u2);
-// Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), u1);

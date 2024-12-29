@@ -8,5 +8,4 @@ public class Workshop01Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Workshop01Application.class, args);
 	}
-
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.santt4naweb.workshop01.entities.User;
 import com.santt4naweb.workshop01.services.UserService;
 
-
 @RestController  
 @RequestMapping(value = "/users")
 public class UserResource {
