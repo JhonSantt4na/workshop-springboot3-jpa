@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.santt4naweb.workshop01.entities.Category;
 import com.santt4naweb.workshop01.entities.Order;
+import com.santt4naweb.workshop01.entities.OrderItem;
 import com.santt4naweb.workshop01.entities.Product;
 import com.santt4naweb.workshop01.entities.User;
 import com.santt4naweb.workshop01.entities.enums.OrderStatus;
 import com.santt4naweb.workshop01.repositories.CategoryRepository;
+import com.santt4naweb.workshop01.repositories.OrderItemRepository;
 import com.santt4naweb.workshop01.repositories.OrderRepository;
 import com.santt4naweb.workshop01.repositories.ProductRepository;
 import com.santt4naweb.workshop01.repositories.UserRepository;
@@ -37,6 +39,9 @@ public class TestConfig implements CommandLineRunner { // CommandLineRunner: Exe
 
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -79,6 +84,15 @@ public class TestConfig implements CommandLineRunner { // CommandLineRunner: Exe
 
 		// Porem quando for salvar no banco tem que ser com paradigma Relacional
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+
+		// Depois de Salvar os Pedidos Vamos instanciar os OrderItens
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+
+		// Save in DB
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 	}
 
 }

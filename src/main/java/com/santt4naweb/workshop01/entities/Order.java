@@ -2,6 +2,8 @@ package com.santt4naweb.workshop01.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.santt4naweb.workshop01.entities.enums.OrderStatus;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,7 +41,10 @@ public class Order implements Serializable {
    @JoinColumn(name = "client_id") // Anotação com o nome da chave estrangeira
    private User client;
 
-   // Constructors
+   // Mapeando o id do OrderItem que no caso é a nossa classe aux
+   @OneToMany(mappedBy = "id.order") // 1 Para muitos ou seja cada pedido pode ter varios produtos
+   private Set<OrderItem> items = new HashSet<>();
+
    public Order() {
    }
 
@@ -46,12 +52,11 @@ public class Order implements Serializable {
    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
       this.id = id;
       this.moment = moment;
-      // this.orderStatus = orderStatus;  >> para o caso padrão
-      setOrderStatus(orderStatus); 
+      // this.orderStatus = orderStatus; >> para o caso padrão
+      setOrderStatus(orderStatus);
       this.client = client;
    }
 
-   // Getters e Setters
    public Long getId() {
       return id;
    }
@@ -90,7 +95,11 @@ public class Order implements Serializable {
       this.client = client;
    }
 
-   // HashCode e Equals
+   // Crinado um Getter para o item
+   public Set<OrderItem> getItems() {
+      return items;
+   }
+
    @Override
    public int hashCode() {
       final int prime = 31;

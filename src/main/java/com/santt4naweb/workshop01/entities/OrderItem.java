@@ -2,6 +2,7 @@ package com.santt4naweb.workshop01.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.santt4naweb.workshop01.entities.pk.OrderItemPK;
 
 import jakarta.persistence.EmbeddedId;
@@ -14,7 +15,8 @@ public class OrderItem implements Serializable {
    private static final long serialVersionUID = 1L;
 
    @EmbeddedId // Informando que é um id de uma classe aux de chave primaria composta
-   private OrderItemPK id;
+   // Sempre que for uma chave desta maneira tem que instanciar ela
+   private OrderItemPK id = new OrderItemPK();
    private Integer quatity;
    private Double price;
 
@@ -38,7 +40,9 @@ public class OrderItem implements Serializable {
    }
 
    // Mas temos que fazer por fora os getters e setters do Order e Product.
-
+   // Precisamos colocar o JsonIgnore Aqui pq o get order que fica chamando
+   // infinito
+   @JsonIgnore
    public Order getOrder() {
       return id.getOrder();
    }
