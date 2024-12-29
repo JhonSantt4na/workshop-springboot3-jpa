@@ -2,7 +2,6 @@ package com.santt4naweb.workshop01.entities;
 
 import java.io.Serializable;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
