@@ -12,28 +12,36 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
+@Table(name = "tb_product")
+public class Product implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
    private String name;
+   private String description;
+   private Double price;
+   private String imgUrl;
 
+   // 1 pra muitos set para não repetir a categoria
    @Transient // Para não interpetra isso
-   private Set<Product> products = new HashSet<>();
+   private Set<Category> categories = new HashSet<>(); // Hash pois tem que usar uma classe e o Set é uma interterface
 
-   // Associações Dpois da classe Product ser feita
    // Constructors
-   public Category() {
+   public Product() {
    }
 
-   public Category(Long id, String name) {
+   public Product(Long id, String name, String description, Double price, String imgUrl) {
       this.id = id;
       this.name = name;
+      this.description = description;
+      this.price = price;
+      this.imgUrl = imgUrl;
    }
+   // Colections não vai no Constructor pois esta sendo estanciado por fora
 
    // Getters e Setters
+
    public Long getId() {
       return id;
    }
@@ -50,13 +58,36 @@ public class Category implements Serializable {
       this.name = name;
    }
 
-   public Set<Product> getProducts() {
-      return products;
+   public String getDescription() {
+      return description;
    }
-   // Lembrando que Collections so tem os Getters pois não mudamos a Coleção apenas
-   // adicionamos/removemos itens
-   // HashCode e Equals
 
+   public void setDescription(String description) {
+      this.description = description;
+   }
+
+   public Double getPrice() {
+      return price;
+   }
+
+   public void setPrice(Double price) {
+      this.price = price;
+   }
+
+   public String getImgUrl() {
+      return imgUrl;
+   }
+
+   public void setImgUrl(String imgUrl) {
+      this.imgUrl = imgUrl;
+   }
+
+   public Set<Category> getCategories() {
+      return categories;
+   }
+   // Colections não tem o Setters
+
+   // HashCode e Equals
    @Override
    public int hashCode() {
       final int prime = 31;
@@ -73,7 +104,7 @@ public class Category implements Serializable {
          return false;
       if (getClass() != obj.getClass())
          return false;
-      Category other = (Category) obj;
+      Product other = (Product) obj;
       if (id == null) {
          if (other.id != null)
             return false;
@@ -82,5 +113,6 @@ public class Category implements Serializable {
       return true;
    }
 
+   // Serialização do Product
    private static final long serialVersionUID = 1l;
 }
