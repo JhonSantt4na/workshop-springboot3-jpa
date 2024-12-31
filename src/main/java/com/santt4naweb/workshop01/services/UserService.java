@@ -11,20 +11,23 @@ import com.santt4naweb.workshop01.repositories.UserRepository;
 
 //@Component 	// Registra a classe como componente do spring e pode ser injetado com o @Autowired
 //@Repository 	// Registra um repositorio
-@Service		// Registra um serviço que é o nosso caso
-
+@Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository repository;
-	
-	public List<User> findAll() { 	// Operação que repassa a chamada para repository findAll
+
+	public List<User> findAll() {
 		return repository.findAll();
 	}
-	
+
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
 		return obj.get();
 	}
-	
+
+	// Inserindo Usuario
+	public User insert(User obj) {
+		return repository.save(obj);
+	}
 }
