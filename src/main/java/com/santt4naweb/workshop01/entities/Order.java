@@ -40,7 +40,6 @@ public class Order implements Serializable {
    @OneToMany(mappedBy = "id.order")
    private Set<OrderItem> items = new HashSet<>();
 
-   // No Caso do 1 para 1 temos que mapear o mesmo id para os dois
    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
    private Payment payment;
 
@@ -88,7 +87,6 @@ public class Order implements Serializable {
       this.client = client;
    }
 
-   // Payments Getters e setters
    public Payment getPayment() {
       return payment;
    }
@@ -99,6 +97,15 @@ public class Order implements Serializable {
 
    public Set<OrderItem> getItems() {
       return items;
+   }
+
+   // Adicionando o Methodo Total
+   public Double getTotal() {
+      double sum = 0.0;
+      for (OrderItem x : items) {
+         sum = sum + x.getSubTotal();
+      }
+      return sum;
    }
 
    @Override
