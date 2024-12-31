@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,6 +68,17 @@ public class UserResource {
 		// espera um uri que é um cabeçario chamado location, contendo o
 		// endereço do nosso item criado.
 		return ResponseEntity.created(uri).body(obj);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+		//ResponseEntity<void> = Não ha nada no corpo da resposta
+		//noContent() = Resposta sem conteudo cod. 204
+		//.build() finaliza a configuração da resposta e a prepara para ser retornada ao cliente.
+		// Se você omitir o .build(), não terá uma resposta completa, pois o ResponseEntity ainda não está construído.
+		// O método .build() é um padrão usado para garantir que a resposta esteja pronta para ser enviada ao cliente.
 	}
 
 }
