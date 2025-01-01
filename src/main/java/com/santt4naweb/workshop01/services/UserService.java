@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.santt4naweb.workshop01.entities.User;
 import com.santt4naweb.workshop01.repositories.UserRepository;
+import com.santt4naweb.workshop01.services.exception.ResourceNotFoundException;
 
 //@Component 	// Registra a classe como componente do spring e pode ser injetado com o @Autowired
 //@Repository 	// Registra um repositorio
@@ -23,7 +24,8 @@ public class UserService {
 
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get();
+		// return obj.get(); // da aquela exception
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id)); // tenta da o get se não conseguir lança uma exception do tipo informado
 	}
 
 	// Inserindo Usuario

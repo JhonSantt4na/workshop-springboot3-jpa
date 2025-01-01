@@ -1,4 +1,5 @@
 package com.santt4naweb.workshop01;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,4 +10,3 @@ public class Workshop01Application {
 		SpringApplication.run(Workshop01Application.class, args);
 	}
 }
- 
