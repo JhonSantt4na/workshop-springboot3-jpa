@@ -35,4 +35,18 @@ public class UserService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+
+	// Atualizando um Usuario
+	public User update(Long id, User obj) {
+		User entity = repository.getReferenceById(id); // Deixa um obj monitorado sem ir pra o banco ainda
+		// Melhor que o getbyid pois o precisa ir no banco o byid
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
 }

@@ -9,3 +9,4 @@ public class Workshop01Application {
 		SpringApplication.run(Workshop01Application.class, args);
 	}
 }
+ 

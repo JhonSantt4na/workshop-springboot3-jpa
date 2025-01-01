@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.santt4naweb.workshop01.entities.User;
 import com.santt4naweb.workshop01.services.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -71,14 +72,23 @@ public class UserResource {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
-		//ResponseEntity<void> = Não ha nada no corpo da resposta
-		//noContent() = Resposta sem conteudo cod. 204
-		//.build() finaliza a configuração da resposta e a prepara para ser retornada ao cliente.
-		// Se você omitir o .build(), não terá uma resposta completa, pois o ResponseEntity ainda não está construído.
-		// O método .build() é um padrão usado para garantir que a resposta esteja pronta para ser enviada ao cliente.
+		// ResponseEntity<void> = Não ha nada no corpo da resposta
+		// noContent() = Resposta sem conteudo cod. 204
+		// .build() finaliza a configuração da resposta e a prepara para ser retornada
+		// ao cliente.
+		// Se você omitir o .build(), não terá uma resposta completa, pois o
+		// ResponseEntity ainda não está construído.
+		// O método .build() é um padrão usado para garantir que a resposta esteja
+		// pronta para ser enviada ao cliente.
+	}
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+		obj = service.update(id, obj); // Atualizando o usuario
+		return ResponseEntity.ok().body(obj);
 	}
 
 }
