@@ -13,6 +13,8 @@ import com.santt4naweb.workshop01.repositories.UserRepository;
 import com.santt4naweb.workshop01.services.exception.DatabaseException;
 import com.santt4naweb.workshop01.services.exception.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 //@Component 	// Registra a classe como componente do spring e pode ser injetado com o @Autowired
 //@Repository 	// Registra um repositorio
 @Service
@@ -55,10 +57,13 @@ public class UserService {
 
 	// Atualizando um Usuario
 	public User update(Long id, User obj) {
-		User entity = repository.getReferenceById(id); // Deixa um obj monitorado sem ir pra o banco ainda
-		// Melhor que o getbyid pois o precisa ir no banco o byid
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id);
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) { // Tentar Atualizar user inexistente
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
