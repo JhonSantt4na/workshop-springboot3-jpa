@@ -1,0 +1,128 @@
+                           Deploy Heroku
+
+Create Heroku app & provision PostgreSQL
+
+Checklist:
+   Heroku Sign Up
+   Create app
+   Provision PostgreSQL
+      App dashboard -> Resources
+      Search "postgres" -> select "Heroku Postgres"
+
+                           Install local PostgreSQL
+
+Checklist:
+
+Download and install: https://www.postgresql.org/download/
+   Super user: postgres
+   Password: 1234567
+   Port: 5432
+
+Start/stop service: Task manager -> Services
+Check instalation
+   Start pgAdmin
+   Databases -> Create -> Database
+      Encoding: UTF8
+
+                           Dev profile
+
+Checklist:
+
+PgAdmin: create local database: create database springboot_course
+Add PostgreSQL Maven dependency
+
+<dependency>
+   <groupId>org.postgresql</groupId>
+   <artifactId>postgresql</artifactId>
+   <scope>runtime</scope>
+</dependency>
+
+                          Create file: 
+
+application-dev.propertiesspring.datasource.url=jdbc:postgresql://localhost:5432/springboot_course
+
+spring.datasource.username=postgres
+spring.datasource.password=1234567
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+jwt.secret=MYJWTSECRET
+jwt.expiration=3600000
+
+   Update application.properties: spring.profiles.active=dev
+   Run application
+
+                           Get SQL script from local PostgreSQL
+
+PgAdmin: get SQL script:
+   Select database
+   Tools -> Backup
+      Format: Plain
+      Encoding: UTF8
+      Dump options:
+         Only schema: YES
+         Blobs: NO
+         Do not save: (ALL)
+         Verbose messages: NO
+
+Delete instructions before CREATE statements
+
+                           Run SQL Script
+
+Checklist:
+
+App dashboard -> Settings -> Config Vars
+   EXAMPLE:
+      postgres://wavglvupbdad:358f443aafe452eca4c58fbc15d02e50b08130c7aaea3aff6c4f59c
+      13f9abb@ec2-23-21-106-266.compute-1.amazonaws.com:5432/d7u9ub86cdsu
+      
+      user: wavglvupbdad
+      password: 358f443aafe452eca4c58fbc15d02e50b08130c7aaea3aff6c4f59c13f9abb
+      server: ec2-23-21-106-266.compute-1.amazonaws.com
+      port: 5432
+      database: d7u9ub86cdsu
+
+PgAdmin: Servers -> Create -> Server
+   Advanced -> DB rescriction: (database) Para Lista somente nossa
+
+Database -> Query Tool
+   Load and run SQL Script
+
+                           Heroku CLI
+
+Google: Heroku CLI
+Terminal
+   heroku login
+   winpty heroku.cmd login
+
+                           Deploy app to Heroku
+
+Heroku app dashboard -> Deploy
+   heroku git:remote -a myapp
+   git remote -v
+
+
+Setup Heroku app Config Vars
+   DATABASE_URL
+   JWT_EXPIRATION
+   JWT_SECRET
+
+Create: application-prod.properties
+   spring.datasource.url=${DATABASE_URL}
+   spring.jpa.hibernate.ddl-auto=none
+   spring.jpa.show-sql=false
+   spring.jpa.properties.hibernate.format_sql=false
+   jwt.secret=${JWT_SECRET}
+   jwt.expiration=${JWT_EXPIRATION}
+
+Update application.properties: spring.profiles.active=prod
+
+Create files: system.properties
+
+java.runtime.version=17
+
+Send to Heroku:
+   git add .
+   git commit -m "Deploy app to Heroku"
+   git push heroku main
